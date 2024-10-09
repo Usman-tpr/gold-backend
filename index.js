@@ -13,7 +13,9 @@ mongoose.connect(process.env.MONGO_URI).then(()=>{
      console.log("Error while connecting to database" , err)
 })
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(cors())
+app.use(cors({
+    origin:"https://gold-backend-zeta.vercel.app"
+}))
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes")
 const homeRoutes  = require("./routes/HomeRoutes")
