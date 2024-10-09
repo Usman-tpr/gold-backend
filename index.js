@@ -16,7 +16,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors())
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes")
+const homeRoutes  = require("./routes/HomeRoutes")
+ 
 
 app.use(express.json());
 app.use("/user" , userRoutes)
 app.use("/product" , productRoutes)
+app.use(homeRoutes)
