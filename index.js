@@ -20,6 +20,8 @@ const homeRoutes  = require("./routes/HomeRoutes")
  
 
 app.use(express.json());
+app.listen("/" , (req , res) =>{
+res.send("welcome")
+})
 app.use("/user" , userRoutes)
 app.use("/product" , productRoutes)
-app.use(homeRoutes)
