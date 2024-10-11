@@ -18,7 +18,8 @@ const productSchema = mongoose.Schema({
         type:String
     },
     userId:{
-        type:String
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"GoldUser"
     },
     category:{
         type:String
@@ -28,4 +29,4 @@ const productSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("Product" , productSchema)
+module.exports = mongoose.model("GoldProduct" , productSchema)

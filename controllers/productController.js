@@ -21,7 +21,6 @@ const postProduct = async ( req , res) =>{
     try {
         
         const imagePaths = req.files.map(file => file.path); 
-         console.log(req.body.category)
         const newProduct = new Product({
             title: req.body.title,
             desc: req.body.description,
@@ -29,8 +28,8 @@ const postProduct = async ( req , res) =>{
             images: imagePaths, 
             price: req.body.price,
             userId:req.user.userId,
-            category:req.body.category[1],
-            subCategory:req.body.subCategory[1]
+            category:req.body.category,
+            subCategory:req.body.subCategory
         });
 
 
@@ -152,7 +151,11 @@ const searchProducts = async (req, res) => {
 
   const dealDetails = async ( req , res ) =>{
     try {
-        const deal = await new Deal(req.body)
+        const deal = await new Deal({
+            buyerId:req.user.userId,
+            sellerId:req.sellerId,
+            productId:req.productId
+        })
         await deal.save();
 
         return res.status(200).json({
@@ -168,15 +171,39 @@ const searchProducts = async (req, res) => {
         });
     }
   }
-  const getDetails = async ( req , res ) =>{
+
+  const getByCategory = async ( req , res ) =>{
     try {
-        const deal = await Deal.find()
+        const products = await Product.find({
+            category:req.body.category
+        })
   
 
         return res.status(200).json({
             success: true,
             message: "Added",
-            deal: deal
+            deal: products
+        });
+    } catch (error) {
+        return res.status(200).json({
+            success: false,
+            message: "error"+error,
+            product: null
+        });
+    }
+  }
+
+  const getBySubCategory = async ( req , res ) =>{
+    try {
+        const products = await Product.find({
+            subCategory:req.body.subCategory
+        })
+  
+
+        return res.status(200).json({
+            success: true,
+            message: "Added",
+            deal: products
         });
     } catch (error) {
         return res.status(200).json({
@@ -188,5 +215,5 @@ const searchProducts = async (req, res) => {
   }
 
 module.exports ={
-    postProduct , deleteProduct , getAllProducts , getProductById , getProductsByToken , searchProducts , dealDetails , getDetails
+    postProduct , deleteProduct , getAllProducts , getProductById , getBySubCategory , searchProducts , dealDetails , getByCategory
 }

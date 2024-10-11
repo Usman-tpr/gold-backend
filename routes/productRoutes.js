@@ -1,5 +1,5 @@
 const routes = require("express").Router();
-const { postProduct , deleteProduct , getAllProducts , getProductById  , getProductsByToken , searchProducts , dealDetails , getDetails} = require("../controllers/productController");
+const { postProduct , deleteProduct , getAllProducts , getProductById  ,  searchProducts , getBySubCategory, getByCategory} = require("../controllers/productController");
 const authMiddleware = require("../middlewares/authMiddleware")
 
 const multer =require("multer")
@@ -21,11 +21,11 @@ const upload = multer({
 routes.post('/add' , authMiddleware , upload.array('images' , 10) , postProduct)
 routes.delete('/delete/:id' ,  deleteProduct)
 routes.get("/all-products" , getAllProducts)
+routes.get("/single-product/:id" , getProductById)
 routes.get("/product/:id" , getProductById)
-routes.get("/product/:id" , getProductById)
-routes.get("/product" ,authMiddleware, getProductsByToken)
+routes.get("/my-products" ,authMiddleware, getProductsByToken)
 routes.get('/search', searchProducts);
-routes.post('/add-deal',dealDetails );
-routes.get('/get-deal',getDetails );
+routes.post('/category',getByCategory );
+routes.post('/subcategory',getBySubCategory );
 
 module.exports = routes

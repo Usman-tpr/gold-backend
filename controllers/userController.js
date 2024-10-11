@@ -3,30 +3,59 @@ const bcrypt = require('@node-rs/bcrypt');
 const jwt = require("jsonwebtoken")
 const signup = async (req, res) => {
     try {
-        console.log(req.body)
         const { name, phone, password, location } = req.body;
+        if(!name , !phone , !password , !location){
+          return  res.send({
+                success: false,
+                message: "Please fill all the fields correctly",
+            })
+        }
+        const isExistUser = await User.findOne({ phone });
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds)
 
-        const newlyData = new User({
-            name,
-            phone,
-            password: hashedPassword,
-            location
-        })
-        await newlyData.save();
-       
-        const token = jwt.sign(
-            { userId: newlyData._id },
-            process.env.JWT_SECRET,
-            { expiresIn: "1d" }
-        );
-        res.send({
+        if(isExistUser){
+           const updatedUser = await User.findOneAndUpdate(
+            { phone },
+            {
+                name,
+                password: hashedPassword,
+                location
+            },
+            { new: true } // Return the updated document
+           );
+
+           return res.status(200).send({
             success: true,
-            message: "Added Successfully",
-            body: newlyData,
-            token: token
-        })
+            message: "Welcome Back " + name,
+            body: updatedUser
+        });
+        }
+
+        else {
+            const newlyData = new User({
+                name,
+                phone,
+                password: hashedPassword,
+                location
+            })
+            await newlyData.save();
+           
+            const token = jwt.sign(
+                { userId: newlyData._id },
+                process.env.JWT_SECRET,
+                { expiresIn: "30d" }
+            );
+            res.send({
+                success: true,
+                message: "Added Successfully",
+                body: newlyData,
+                token: token
+            })
+        }
+
+
+
     } catch (error) {
         res.send({
             success: false,
@@ -44,7 +73,7 @@ const login = async (req, res) => {
             const validPassword = await bcrypt.compare(req.body.password, user.password);
             if (validPassword) {
                 return res.status(200).json({
-                    message: "Login successful",
+                    message: "Welcome Back " + user.name,
                     user: user
                 });
             } else {
