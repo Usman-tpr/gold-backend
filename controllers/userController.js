@@ -24,11 +24,16 @@ const signup = async (req, res) => {
             },
             { new: true } // Return the updated document
            );
-
+           const token = jwt.sign(
+            { userId: updatedUser._id },
+            process.env.JWT_SECRET,
+            { expiresIn: "30d" }
+        );
            return res.status(200).send({
             success: true,
             message: "Welcome Back " + name,
-            body: updatedUser
+            body: updatedUser,
+            token:token
         });
         }
 
