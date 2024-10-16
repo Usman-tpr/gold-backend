@@ -17,10 +17,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Enable CORS
 app.use(cors({
-    origin: 'gold-backend-eta.vercel.app', // Replace with your client's domain
-    credentials: true, // Allows cookies to be sent/received
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+    origin: ['https://gold-backend-eta.vercel.app', 'http://localhost:3000'], // Allow multiple origins
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 // Import routes
