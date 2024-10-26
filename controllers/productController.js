@@ -1,7 +1,8 @@
 const Product = require('../models/ProductModel');
 const Deal = require('../models/DealsModel');
 const cloudinary = require('../config/cloudinary');
-
+const Cart = require("../models/cartModel");
+const { default: mongoose } = require('mongoose');
 // Helper function to upload images to Cloudinary using streams
 const uploadImageToCloudinary = (file) => {
     return new Promise((resolve, reject) => {
@@ -218,7 +219,80 @@ const getBySubCategory = async (req, res) => {
   }
 };
 
+
+// POST: Get Products by SubCategory
+
+
+const addToCart = async (req, res) => {
+  try {
+    const { productId } = req.body;
+
+    // Validate Product ID
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(404).json({ success: false, message: "Product Not Found" });
+    }
+
+    // Check if the product exists
+    const isExistProduct = await Product.findById(productId);
+    if (!isExistProduct) {
+      return res.status(404).json({ success: false, message: "Product Not Found" });
+    }
+
+    // Check if the product is already in the cart
+    const isAlreadyInCart = await Cart.findOne({ productId, userId: req.user.userId });
+
+    if (isAlreadyInCart) {
+      // Delete the product from the cart if it already exists
+      const deletedFromCart = await Cart.findByIdAndDelete(isAlreadyInCart._id);
+      return res.status(200).json({ 
+        success: true, 
+        message: "Deleted From Cart", 
+        body: deletedFromCart 
+      });
+    }
+
+    // Add the product to the cart
+    const newCart = new Cart({
+      ...req.body,
+      userId: req.user.userId
+    });
+    await newCart.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Added To Cart",
+      cartItems: newCart,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Error: ${error.message}`,
+    });
+  }
+};
+
+const getMyCarts = async (req, res) => {
+    try {
+      const products = await Cart.find({ userId:req.user.userId});
+  
+      res.status(200).json({
+        success: true,
+        message: 'Carts retrieved',
+        products,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: `Error: ${error}`,
+      });
+    }
+  };
+
+
 module.exports = {
+    addToCart,
+    getMyCarts,
   postProduct,
   deleteProduct,
   getAllProducts,

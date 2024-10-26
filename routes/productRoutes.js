@@ -7,10 +7,11 @@ const {
     searchProducts, 
     getBySubCategory, 
     getProductsByToken,
+    addToCart,
+    getMyCarts,
     getByCategory 
 } = require("../controllers/productController");
 const authMiddleware = require("../middlewares/authMiddleware");
-const multer = require('multer');
 
 // Setup Multer for file handling
 const upload = require("../config/multer")
@@ -24,5 +25,7 @@ routes.get("/my-products", authMiddleware, getProductsByToken);
 routes.get('/search', searchProducts);
 routes.post('/category', getByCategory);
 routes.post('/subcategory', getBySubCategory);
+routes.post('/add-to-cart',authMiddleware, addToCart);
+routes.get('/get-my-carts',authMiddleware, getMyCarts);
 
 module.exports = routes;
