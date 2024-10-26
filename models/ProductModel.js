@@ -17,6 +17,12 @@ const productSchema = mongoose.Schema({
     location:{
         type:String
     },
+    condition:{
+        type:String
+    },
+    weight:{
+        type:String
+    },
     userId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"GoldUser"
