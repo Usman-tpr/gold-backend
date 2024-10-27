@@ -17,7 +17,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Enable CORS
 app.use(cors({
-    origin: ['http://localhost:3000'], // Your frontend URL
+    origin: ['http://localhost:3000'], 
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Ensure OPTIONS is included
     allowedHeaders: ['Content-Type', 'Authorization'],

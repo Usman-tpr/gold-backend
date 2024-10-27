@@ -8,8 +8,11 @@ const {
     getBySubCategory, 
     getProductsByToken,
     addToCart,
+    updateProduct,
+    getHomePageProducts,
     getMyCarts,
-    getByCategory 
+    getByCategory ,
+    getProductsBySlug
 } = require("../controllers/productController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -27,5 +30,8 @@ routes.post('/category', getByCategory);
 routes.post('/subcategory', getBySubCategory);
 routes.post('/add-to-cart',authMiddleware, addToCart);
 routes.get('/get-my-carts',authMiddleware, getMyCarts);
+routes.put('/update/:id',authMiddleware, updateProduct);
+routes.get('/get-homepage-products' , getHomePageProducts)
+routes.get('/:slug' , getProductsBySlug)
 
 module.exports = routes;

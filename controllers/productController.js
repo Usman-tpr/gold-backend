@@ -2,6 +2,7 @@ const Product = require('../models/ProductModel');
 const Deal = require('../models/DealsModel');
 const cloudinary = require('../config/cloudinary');
 const Cart = require("../models/cartModel");
+
 const { default: mongoose } = require('mongoose');
 // Helper function to upload images to Cloudinary using streams
 const uploadImageToCloudinary = (file) => {
@@ -28,7 +29,6 @@ const uploadImagesToCloudinary = async (files) => {
 
 const postProduct = async (req, res) => {
     try {
-
         if (!req.files || req.files.length === 0) {
             return res.status(400).send({
                 success: false,
@@ -37,17 +37,17 @@ const postProduct = async (req, res) => {
         }
 
         const uploadedImages = await uploadImagesToCloudinary(req.files);
-
         const newProduct = new Product({
             title: req.body.title,
             desc: req.body.description,
             location: req.body.location,
             condition: req.body.condition,
+            weight:req.body.weight,
             images: uploadedImages,
             price: req.body.price,
             userId: req.user.userId,
             category: req.body.category,
-            subCategory: req.body.subCategory,
+            subCategory: req.body.subCategory
         });
 
         await newProduct.save();
@@ -103,7 +103,7 @@ const getProductById = async (req, res) => {
 // GET: Get Products by Token (User's Products)
 const getProductsByToken = async (req, res) => {
   try {
-    const products = await Product.find({ userId: req.user.userId });
+    const products = await Product.find({ userId: req.user.userId }).sort({createdAt:-1})
     res.status(200).json({
       success: true,
       message: 'Retrieved Products By User',
@@ -147,13 +147,16 @@ const deleteProduct = async (req, res) => {
 // GET: Search Products by Query
 const searchProducts = async (req, res) => {
   const searchQuery = req.query.q;
-
   try {
     const products = await Product.find({
       title: { $regex: searchQuery, $options: 'i' },
     });
 
-    res.status(200).json(products);
+    res.status(200).json({
+        success: true,
+        message: 'All Products Retrieved',
+        body: products,
+      });
   } catch (error) {
     res.status(500).json({ message: 'Server error, please try again.' });
   }
@@ -288,7 +291,91 @@ const getMyCarts = async (req, res) => {
       });
     }
   };
+  const updateProduct = async (req, res) => {
+    try {
+      const { id } = req.params; // Get product ID from params
+      const updates = req.body;  // Get updated fields from request body
+  
+      // Use $set to update only the changed fields
+      const updatedProduct = await Product.findByIdAndUpdate(
+        id,
+        { $set: updates },  // Only set fields passed in req.body
+        { new: true, runValidators: true } // Return updated product & validate input
+      );
+  
+      if (!updatedProduct) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+  
+     res.send({
+        success:true,
+        mesage:"Product Updated Succesfully"
+     })
+    } catch (error) {
+      res.status(500).json({ message: 'Error updating product', error });
+    }
+  };
 
+  const getHomePageProducts = async (req, res) => {
+    try {
+      const products = await Product.aggregate([
+        // 1. Sort by createdAt in descending order (latest first)
+        { $sort: { createdAt: -1 } },
+  
+        // 2. Group by category and push products into an array
+        {
+          $group: {
+            _id: '$category', // Group by category field
+            latestProducts: { $push: '$$ROOT' }, // Add entire product to array
+          },
+        },
+  
+        // 3. Limit each category to the top 5 products
+        {
+          $project: {
+            _id: 0, // Exclude _id from the result
+            category: '$_id', // Rename _id to category
+            products: { $slice: ['$latestProducts', 5] }, // Keep only top 5 products
+          },
+        },
+      ]);
+  
+      res.send({
+        success:true,
+        message:"Retreived successfully",
+        body:products
+      })
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching products', error });
+    }
+  };
+  
+  const getProductsBySlug = async ( req , res ) =>{
+    try {
+
+        const slug = req.params.slug
+        const products = await Product.find({
+            slug:slug
+        }).populate("userId" , "-password")
+
+        const relatedProducts = await Product.find({
+              category:products.category
+        })
+
+        res.send({
+            success:true,
+            message:"retrived Successfully",
+            body:products,
+            relatedProducts:relatedProducts
+        })
+    } catch (error) {
+        res.send({
+            success:false,
+            message:"error while getting" + error,
+            body:null
+        })
+    }
+  }
 
 module.exports = {
     addToCart,
@@ -302,4 +389,7 @@ module.exports = {
   dealDetails,
   getByCategory,
   getBySubCategory,
+  updateProduct,
+  getHomePageProducts,
+  getProductsBySlug
 };
