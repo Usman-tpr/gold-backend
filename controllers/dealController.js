@@ -9,9 +9,9 @@ const dealDetails = async (req, res) => {
         })
         await deal.save();
 
-        return res.status(200).json({
+        return res.status(201).json({
             success: true,
-            message: "Created Deal",
+            message: "Deal Confirmed We Will Contact You Soon",
             deal: deal
         });
     } catch (error) {

@@ -17,11 +17,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Enable CORS
 app.use(cors({
-    origin: ['http://localhost:3000'], 
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Ensure OPTIONS is included
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: 'https://gold-trade-hub-main-final.vercel.app',  // Remove the trailing slash
+    credentials: true,  // Allow cookies and other credentials
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS method
+    allowedHeaders: ['Content-Type', 'Authorization'],  // Allow necessary headers
 }));
+
 
 
 // Import routes
