@@ -4,7 +4,7 @@ const { dealDetails , getDetails , myDeals , deleteDeal, isDoneDeal } = require(
 routes.post('/create-deal',authMiddleware , dealDetails );
 routes.get('/all-deals',getDetails );
 routes.get('/my-deals', authMiddleware , myDeals );
-routes.delete('/delete/:id', deleteDeal );
+routes.delete('/:id', deleteDeal );
 routes.put('/completed/:id', isDoneDeal );
 
 module.exports = routes

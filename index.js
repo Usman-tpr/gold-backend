@@ -17,7 +17,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Enable CORS
 app.use(cors({
-    origin: 'https://gold-trade-hub-main-final.vercel.app',  // Remove the trailing slash
+    origin: ['https://gold-trade-hub-main-final.vercel.app' , 'http://localhost:3000'],  // Remove the trailing slash
     credentials: true,  // Allow cookies and other credentials
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS method
     allowedHeaders: ['Content-Type', 'Authorization'],  // Allow necessary headers
@@ -29,6 +29,8 @@ app.use(cors({
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const dealRoutes = require("./routes/dealRoutes")
+const categoryRoutes = require("./routes/CategoryRoutes")
+const SubCategoryRoutes = require("./routes/SubCategory")
 // Parse JSON requests
 app.use(express.json());
 
@@ -36,6 +38,8 @@ app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/product", productRoutes);
 app.use("/deal", dealRoutes);
+app.use("/category", categoryRoutes);
+app.use("/subCategory", SubCategoryRoutes);
 
 // Start the server
 const port = process.env.PORT || 5000;  // Use the port from environment variable or default to 5000

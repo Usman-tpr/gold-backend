@@ -79,7 +79,6 @@ const myDeals = async (req, res) => {
 const deleteDeal = async (req, res) => {
     try {
         const deletedDeal = await Deal.findByIdAndDelete(req.params.id);
-
       return  res.send({
             success: true,
             error: null,

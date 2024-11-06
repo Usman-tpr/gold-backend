@@ -1,31 +1,9 @@
 const Product = require('../models/ProductModel');
 const Deal = require('../models/DealsModel');
-const cloudinary = require('../config/cloudinary');
 const Cart = require("../models/cartModel");
-
+const {uploadImagesToCloudinary} = require("../utills/cloudinary")
 const { default: mongoose } = require('mongoose');
-// Helper function to upload images to Cloudinary using streams
-const uploadImageToCloudinary = (file) => {
-    return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-            { folder: 'products' },
-            (error, result) => {
-                if (error) return reject(error);
-                resolve(result.secure_url);
-            }
-        );
-        stream.end(file.buffer);  // End the stream with the file buffer
-    });
-};
 
-const uploadImagesToCloudinary = async (files) => {
-    try {
-        return Promise.all(files.map(file => uploadImageToCloudinary(file)));
-    } catch (error) {
-        console.error("Error uploading to Cloudinary:", error);
-        throw error;
-    }
-};
 
 const postProduct = async (req, res) => {
     try {
