@@ -25,7 +25,8 @@ const postProduct = async (req, res) => {
             price: req.body.price,
             userId: req.user.userId,
             category: req.body.category,
-            subCategory: req.body.subCategory
+            subCategory: req.body.subCategory,
+            type:req.body.type
         });
 
         await newProduct.save();
@@ -126,15 +127,27 @@ const deleteProduct = async (req, res) => {
 const searchProducts = async (req, res) => {
   const searchQuery = req.query.q;
   try {
-    const products = await Product.find({
-      title: { $regex: searchQuery, $options: 'i' },
-    });
+    let products;
+
+    if (!searchQuery) {
+      // No search query, retrieve all products
+      products = await Product.find({});
+    } else {
+      // Search with query using regex on category and subCategory fields
+      const regex = new RegExp(searchQuery, 'i');
+      products = await Product.find({
+        $or: [
+          { category: { $regex: regex } },
+          { subCategory: { $regex: regex } },
+        ],
+      });
+    }
 
     res.status(200).json({
-        success: true,
-        message: 'All Products Retrieved',
-        body: products,
-      });
+      success: true,
+      message: 'Products Retrieved',
+      body: products,
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server error, please try again.' });
   }

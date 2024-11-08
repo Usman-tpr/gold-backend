@@ -28,6 +28,10 @@ const productSchema = mongoose.Schema({
         type: String,
         unique: true
     },
+    type:{
+        type:String,
+
+    },
 
     userId: {
         type: mongoose.Schema.Types.ObjectId,

@@ -3,7 +3,11 @@ const { uploadImageToCloudinary } = require("../utills/cloudinary");
 
 const add = async( req , res ) => {
     try {
-        const imageUrl = await uploadImageToCloudinary(req.file)
+        let imageUrl;
+        
+        if(req.file){
+             imageUrl = await uploadImageToCloudinary(req.file)
+        }
 
         const data = {
             name:req.body.name,
