@@ -234,17 +234,17 @@ const addToCart = async (req, res) => {
     }
 
     // Check if the product is already in the cart
-    const isAlreadyInCart = await Cart.findOne({ productId, userId: req.user.userId });
+    // const isAlreadyInCart = await Cart.findOne({ productId, userId: req.user.userId });
 
-    if (isAlreadyInCart) {
-      // Delete the product from the cart if it already exists
-      const deletedFromCart = await Cart.findByIdAndDelete(isAlreadyInCart._id);
-      return res.status(200).json({ 
-        success: true, 
-        message: "Deleted From Cart", 
-        body: deletedFromCart 
-      });
-    }
+    // if (isAlreadyInCart) {
+    //   // Delete the product from the cart if it already exists
+    //   const deletedFromCart = await Cart.findByIdAndDelete(isAlreadyInCart._id);
+    //   return res.status(200).json({ 
+    //     success: true, 
+    //     message: "Deleted From Cart", 
+    //     body: deletedFromCart 
+    //   });
+    // }
 
     // Add the product to the cart
     const newCart = new Cart({
