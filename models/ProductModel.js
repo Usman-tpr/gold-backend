@@ -32,7 +32,6 @@ const productSchema = mongoose.Schema({
         type:String,
 
     },
-
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "GoldUser"

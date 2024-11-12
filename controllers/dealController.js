@@ -8,7 +8,7 @@ const dealDetails = async (req, res) => {
             productId: req.body.productId
         })
         await deal.save();
-
+          console.log(deal)
         return res.status(201).json({
             success: true,
             message: "Deal Confirmed We Will Contact You Soon",

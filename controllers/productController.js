@@ -30,6 +30,7 @@ const postProduct = async (req, res) => {
         });
 
         await newProduct.save();
+        console.log(newProduct)
 
         res.status(201).send({
             success: true,
@@ -268,7 +269,7 @@ const addToCart = async (req, res) => {
 
 const getMyCarts = async (req, res) => {
     try {
-      const products = await Cart.find({ userId:req.user.userId});
+      const products = await Cart.find({ userId:req.user.userId}).populate("productId")
   
       res.status(200).json({
         success: true,
@@ -347,7 +348,7 @@ const getMyCarts = async (req, res) => {
         const slug = req.params.slug
         const products = await Product.find({
             slug:slug
-        }).populate("userId" , "-password")
+        }).populate("userId")
 
         const relatedProducts = await Product.find({
               category:products.category
