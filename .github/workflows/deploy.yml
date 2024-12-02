@@ -3,7 +3,7 @@ name: Deploy Backend to VPS
 on:
   push:
     branches:
-      - main  # Trigger on push to the main branch
+      - main
 
 jobs:
   deploy:
@@ -20,17 +20,19 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Test SSH connection to the server (optional step)
+      # Test SSH connection to the server
       - name: Test SSH connection
-        run: |
-          ssh -o StrictHostKeyChecking=no root@46.202.162.48 'echo "SSH connection successful"'
-
-      # Check if the gold-backend directory exists on the server
-      - name: Check if gold-backend directory exists
-        run: |
-          ssh -o StrictHostKeyChecking=no root@46.202.162.48 'ls -la /root/gold-backend'
+        run: ssh -o StrictHostKeyChecking=no root@46.202.162.48 'echo "SSH connection successful"'
 
       # Deploy code to the server
       - name: Deploy to server
-        run: |
-          ssh -o StrictHostKeyChecking=no root@46.202.162.48 'cd /gold-backend && echo "In gold-backend directory" && git pull origin main && echo "Git pull complete" && npm install && echo "NPM install complete" && pm2 restart all && echo "PM2 restart complete"'
+        run: ssh -o StrictHostKeyChecking=no root@46.202.162.48 '
+          cd /root/gold-backend &&
+          echo "In gold-backend directory" &&
+          git pull origin main &&
+          echo "Git pull complete" &&
+          npm install &&
+          echo "NPM install complete" &&
+          pm2 restart all &&
+          echo "PM2 restart complete"
+        
