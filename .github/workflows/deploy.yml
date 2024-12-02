@@ -1,45 +1,27 @@
-name: Deploy Backend to VPS
+name: Deploy to VPS
 
 on:
   push:
     branches:
-      - main
+      - main  # Adjust if you're using a different branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the backend repository code
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      # Set up SSH for the server
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
-      # Add server to known hosts
-      - name: Add server to known hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H 46.202.162.48 >> ~/.ssh/known_hosts
-
-      # Test SSH connection to the server
-      - name: Test SSH connection
-        run: ssh -o StrictHostKeyChecking=no root@46.202.162.48 'echo "SSH connection successful"'
-
-      # Deploy code to the server
-      - name: Deploy to server
-        run: |
-          ssh -o StrictHostKeyChecking=no root@46.202.162.48 '
-          cd /root/gold-backend &&
-          echo "In gold-backend directory" &&
-          git pull origin main &&
-          echo "Git pull complete" &&
-          npm install &&
-          echo "NPM install complete" &&
-          pm2 restart all &&
-          echo "PM2 restart complete"
-          
+    - name: Deploy to VPS
+      run: |
+        ssh -o StrictHostKeyChecking=no root@46.202.162.48 'cd /root/gold-backend && git pull origin main && npm install && pm2 restart your-app'
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
