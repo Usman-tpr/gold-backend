@@ -20,13 +20,20 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      # Add server to known hosts
+      - name: Add server to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 46.202.162.48 >> ~/.ssh/known_hosts
+
       # Test SSH connection to the server
       - name: Test SSH connection
         run: ssh -o StrictHostKeyChecking=no root@46.202.162.48 'echo "SSH connection successful"'
 
       # Deploy code to the server
       - name: Deploy to server
-        run: ssh -o StrictHostKeyChecking=no root@46.202.162.48 '
+        run: |
+          ssh -o StrictHostKeyChecking=no root@46.202.162.48 '
           cd /root/gold-backend &&
           echo "In gold-backend directory" &&
           git pull origin main &&
@@ -35,4 +42,4 @@ jobs:
           echo "NPM install complete" &&
           pm2 restart all &&
           echo "PM2 restart complete"
-        
+          
