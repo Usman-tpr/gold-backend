@@ -20,7 +20,17 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      # Test SSH connection to the server (optional step)
+      - name: Test SSH connection
+        run: |
+          ssh -o StrictHostKeyChecking=no root@46.202.162.48 'echo "SSH connection successful"'
+
+      # Check if the gold-backend directory exists on the server
+      - name: Check if gold-backend directory exists
+        run: |
+          ssh -o StrictHostKeyChecking=no root@46.202.162.48 'ls -la /root/gold-backend'
+
       # Deploy code to the server
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no root@46.202.162.48 'cd /root/gold-backend && git pull origin main && npm install && pm2 restart all'
+          ssh -o StrictHostKeyChecking=no root@46.202.162.48 'cd /root/gold-backend && echo "In gold-backend directory" && git pull origin main && echo "Git pull complete" && npm install && echo "NPM install complete" && pm2 restart all && echo "PM2 restart complete"'
