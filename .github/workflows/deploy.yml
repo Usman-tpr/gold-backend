@@ -1,0 +1,26 @@
+name: Deploy Backend to VPS
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the backend repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up SSH for the server
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # Deploy code to the server
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no root@46.202.162.48 'cd /gold-backend && git pull origin main && npm install && pm2 restart all'
