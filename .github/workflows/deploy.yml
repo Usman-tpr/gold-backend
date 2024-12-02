@@ -33,4 +33,4 @@ jobs:
       # Deploy code to the server
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no root@46.202.162.48 'cd /root/gold-backend && echo "In gold-backend directory" && git pull origin main && echo "Git pull complete" && npm install && echo "NPM install complete" && pm2 restart all && echo "PM2 restart complete"'
+          ssh -o StrictHostKeyChecking=no root@46.202.162.48 'cd /gold-backend && echo "In gold-backend directory" && git pull origin main && echo "Git pull complete" && npm install && echo "NPM install complete" && pm2 restart all && echo "PM2 restart complete"'
