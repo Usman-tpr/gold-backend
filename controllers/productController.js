@@ -26,11 +26,13 @@ const postProduct = async (req, res) => {
             userId: req.user.userId,
             category: req.body.category,
             subCategory: req.body.subCategory,
-            type:req.body.type
+            type:req.body.type,
+            metalType:req.body.metal,
+            karatage:req.body.karat,
+            sellingType:req.body.sellingType
         });
 
         await newProduct.save();
-        console.log(newProduct)
 
         res.status(201).send({
             success: true,
@@ -369,6 +371,28 @@ const getMyCarts = async (req, res) => {
     }
   }
 
+  const getFullSet = async ( req , res ) =>{
+    try {
+    
+        const products = await Product.find({
+            sellingType:"F"
+        }).populate("userId")
+
+
+        res.send({
+            success:true,
+            message:"retrived Success",
+            body:products
+        })
+    } catch (error) {
+        res.send({
+            success:false,
+            message:"error while getting" + error,
+            body:null
+        })
+    }
+  }
+
 module.exports = {
     addToCart,
     getMyCarts,
@@ -383,5 +407,6 @@ module.exports = {
   getBySubCategory,
   updateProduct,
   getHomePageProducts,
-  getProductsBySlug
+  getProductsBySlug,
+  getFullSet
 };

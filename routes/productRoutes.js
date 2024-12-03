@@ -12,7 +12,8 @@ const {
     getHomePageProducts,
     getMyCarts,
     getByCategory ,
-    getProductsBySlug
+    getProductsBySlug,
+    getFullSet
 } = require("../controllers/productController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -33,6 +34,8 @@ routes.post('/add-to-cart',authMiddleware, addToCart);
 routes.get('/get-my-carts',authMiddleware, getMyCarts);
 routes.put('/update/:id',authMiddleware, updateProduct);
 routes.get('/get-homepage-products' , getHomePageProducts)
+routes.get('/full-set' , getFullSet)
 routes.get('/:slug' , getProductsBySlug)
+
 
 module.exports = routes;

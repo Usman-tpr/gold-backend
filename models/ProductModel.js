@@ -41,9 +41,19 @@ const productSchema = mongoose.Schema({
     },
     subCategory: {
         type: String
-    }
+    },
+    metalType: {
+        type: String
+    },
+    karatage: {
+        type: String
+    },
+    sellingType: {
+        type: String
+    },
+    
 },
-    { timestamps: true } // Automatically adds `createdAt` and `updatedAt`
+    { timestamps: true } 
 
 )
 
