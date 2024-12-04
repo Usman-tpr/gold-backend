@@ -18,7 +18,7 @@ app.options('*', cors());
 
 // Enable CORS
 app.use(cors({
-    origin: ['http://localhost:3000' , 'http://46.202.162.48' , ],  // Remove the trailing slash
+    origin: ['http://localhost:3000' , 'https://gold.ayancurtains.com' , ],  // Remove the trailing slash
     credentials: true,  // Allow cookies and other credentials
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS method
     allowedHeaders: ['Content-Type', 'Authorization'],  // Allow necessary headers
