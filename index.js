@@ -5,6 +5,14 @@ const path = require('path');
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+// Enable CORS
+app.use(cors({
+    origin: ['http://localhost:3000' , 'https://gold.ayancurtains.com' , ],  // Remove the trailing slash
+    credentials: true,  // Allow cookies and other credentials
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS method
+    allowedHeaders: ['Content-Type', 'Authorization'],  // Allow necessary headers
+}));
+
 // Connect to the database
 mongoose.connect(process.env.MONGO_URI).then(() => {
     console.log("Connected to the database");
@@ -16,13 +24,7 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.options('*', cors());
 
-// Enable CORS
-app.use(cors({
-    origin: ['http://localhost:3000' , 'https://gold.ayancurtains.com' , ],  // Remove the trailing slash
-    credentials: true,  // Allow cookies and other credentials
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS method
-    allowedHeaders: ['Content-Type', 'Authorization'],  // Allow necessary headers
-}));
+
 
 
 
