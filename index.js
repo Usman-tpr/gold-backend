@@ -5,14 +5,13 @@ const path = require('path');
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-// Custom CORS middleware
+// Custom CORS middleware (ensure it's the first middleware)
 app.use(cors({
-    origin: ['https://gold.ayancurtains.com'], // Allowed origin
+    origin: 'https://gold.ayancurtains.com',  // Allow specific frontend origin
     credentials: true,  // Allow credentials (cookies, authorization headers)
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allowed methods
     allowedHeaders: ['Content-Type', 'Authorization'],  // Allowed headers
 }));
-  
 
 // Connect to the database
 mongoose.connect(process.env.MONGO_URI).then(() => {
@@ -23,18 +22,14 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.options('*', cors());
-
-
-
-
 
 // Import routes
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
-const dealRoutes = require("./routes/dealRoutes")
-const categoryRoutes = require("./routes/CategoryRoutes")
-const SubCategoryRoutes = require("./routes/SubCategory")
+const dealRoutes = require("./routes/dealRoutes");
+const categoryRoutes = require("./routes/CategoryRoutes");
+const SubCategoryRoutes = require("./routes/SubCategory");
+
 // Parse JSON requests
 app.use(express.json());
 
@@ -46,12 +41,11 @@ app.use("/category", categoryRoutes);
 app.use("/subCategory", SubCategoryRoutes);
 
 // Start the server
-const port = process.env.PORT || 8002;  // Use the port from environment variable or default to 5000
+const port = process.env.PORT || 8002;  // Use the port from environment variable or default to 8002
 app.listen(port, () => {
     console.log("Server running on "+ port);
-  });
-  
+});
+
 app.get('/', (req, res) => {
     res.send('Welcome to the backend!');
-  });
-  
+});
