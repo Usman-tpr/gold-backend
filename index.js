@@ -5,13 +5,21 @@ const path = require('path');
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-// Enable CORS
-app.use(cors({
-    origin: ['http://localhost:3000' , 'https://gold.ayancurtains.com' , ],  // Remove the trailing slash
-    credentials: true,  // Allow cookies and other credentials
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS method
-    allowedHeaders: ['Content-Type', 'Authorization'],  // Allow necessary headers
-}));
+// Custom CORS middleware
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://gold.ayancurtains.com");  // Adjust your frontend URL
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
+  
+    // Handle pre-flight (OPTIONS) requests
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(200);  // Respond to OPTIONS request with status 200
+    }
+  
+    next();  // Continue to the next middleware/route handler
+  });
+  
 
 // Connect to the database
 mongoose.connect(process.env.MONGO_URI).then(() => {
