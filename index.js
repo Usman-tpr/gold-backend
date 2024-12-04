@@ -50,3 +50,7 @@ const port = process.env.PORT || 8000;  // Use the port from environment variabl
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+app.get('/', (req, res) => {
+    res.send('Welcome to the backend!');
+  });
+  
