@@ -45,7 +45,7 @@ app.use("/category", categoryRoutes);
 app.use("/subCategory", SubCategoryRoutes);
 
 // Start the server
-const port = process.env.PORT || 5001;  // Use the port from environment variable or default to 5000
+const port = process.env.PORT || 8000;  // Use the port from environment variable or default to 5000
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
