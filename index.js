@@ -7,7 +7,7 @@ require("dotenv").config();
 
 // Custom CORS middleware (ensure it's the first middleware)
 app.use(cors({
-    origin: 'https://gold.ayancurtains.com',  // Allow specific frontend origin
+    origin: ['https://gold.ayancurtains.com' , 'http://localhost:3000'],  // Allow specific frontend origin
     credentials: true,  // Allow credentials (cookies, authorization headers)
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allowed methods
     allowedHeaders: ['Content-Type', 'Authorization'],  // Allowed headers

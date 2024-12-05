@@ -3,8 +3,8 @@ const bcrypt = require('@node-rs/bcrypt');
 const jwt = require("jsonwebtoken")
 const signup = async (req, res) => {
     try {
-        const { name, phone, password, location } = req.body;
-        if(!name , !phone , !password , !location){
+        const { name, phone, password} = req.body;
+        if(!name , !phone , !password ){
           return  res.send({
                 success: false,
                 message: "Please fill all the fields correctly",
@@ -20,7 +20,6 @@ const signup = async (req, res) => {
             {
                 name,
                 password: hashedPassword,
-                location
             },
             { new: true } // Return the updated document
            );
