@@ -29,7 +29,52 @@ const postProduct = async (req, res) => {
             type:req.body.type,
             metalType:req.body.metal,
             karatage:req.body.karat,
-            sellingType:req.body.sellingType
+            sellingType:req.body.sellingType,
+            rent:false
+        });
+
+        await newProduct.save();
+
+        res.status(201).send({
+            success: true,
+            message: "Product uploaded successfully",
+            product: newProduct,
+        });
+    } catch (error) {
+        console.error("Error while uploading product:", error);
+        res.status(500).send({
+            success: false,
+            message: "Error while uploading product",
+            error: error.message,
+        });
+    }
+};
+const AddOnRent = async (req, res) => {
+    try {
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).send({
+                success: false,
+                message: "No images provided.",
+            });
+        }
+
+        const uploadedImages = await uploadImagesToCloudinary(req.files);
+        const newProduct = new Product({
+            title: req.body.title,
+            desc: req.body.description,
+            location: req.body.location,
+            condition: req.body.condition,
+            weight:req.body.weight,
+            images: uploadedImages,
+            price: req.body.price,
+            userId: req.user.userId,
+            category: req.body.category,
+            subCategory: req.body.subCategory,
+            type:req.body.type,
+            metalType:req.body.metal,
+            karatage:req.body.karat,
+            sellingType:req.body.sellingType,
+            rent:true
         });
 
         await newProduct.save();
@@ -138,12 +183,9 @@ const searchProducts = async (req, res) => {
     } else {
       // Search with query using regex on category and subCategory fields
       const regex = new RegExp(searchQuery, 'i');
-      products = await Product.find({
-        $or: [
-          { category: { $regex: regex } },
-          { subCategory: { $regex: regex } },
-        ],
-      });
+      products = await Product.find(
+          { category: { $regex: regex } }
+      );
     }
 
     res.status(200).json({
@@ -408,5 +450,6 @@ module.exports = {
   updateProduct,
   getHomePageProducts,
   getProductsBySlug,
-  getFullSet
+  getFullSet,
+  AddOnRent
 };

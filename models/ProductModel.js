@@ -51,6 +51,9 @@ const productSchema = mongoose.Schema({
     sellingType: {
         type: String
     },
+    rent: {
+        type: Boolean
+    },
     
 },
     { timestamps: true } 

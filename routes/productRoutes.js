@@ -13,7 +13,8 @@ const {
     getMyCarts,
     getByCategory ,
     getProductsBySlug,
-    getFullSet
+    getFullSet,
+    AddOnRent
 } = require("../controllers/productController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -22,6 +23,7 @@ const upload = require("../config/multer")
 
 // Routes
 routes.post('/add', authMiddleware, upload.array('images', 10), postProduct); // Limit to 10 images
+routes.post('/add-on-rent', authMiddleware, upload.array('images', 10), AddOnRent); // Limit to 10 images
 routes.delete('/delete/:id', deleteProduct);
 routes.get("/all-products", getAllProducts); 
 
