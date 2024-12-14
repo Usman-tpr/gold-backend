@@ -70,7 +70,7 @@ const getDropdownProducts = async ( req , res ) =>{
     
         const query = req.query.q;
  
-        const categories = await CategoryModel.find({
+        const categories = await Category.find({
           name : { $regex : query , $options:"i"}
         }).limit(5)
 
