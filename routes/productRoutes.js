@@ -14,7 +14,7 @@ const {
     getByCategory ,
     getProductsBySlug,
     getFullSet,
-    AddOnRent
+    AddOnRent,
 } = require("../controllers/productController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -30,6 +30,7 @@ routes.get("/all-products", getAllProducts);
 routes.get("/single-product/:id", getProductById);
 routes.get("/my-products", authMiddleware, getProductsByToken);
 routes.get('/search', searchProducts);
+
 routes.post('/category', getByCategory);
 routes.post('/subcategory', getBySubCategory);
 routes.post('/add-to-cart',authMiddleware, addToCart);

@@ -48,5 +48,45 @@ const getAll = async ( req , res ) =>{
         })
     }
 }
+const trendingCategory = async ( req , res ) =>{
+    try {
+        const allCategories = await Category.find().limit(5);
 
-module.exports = { add , getAll }
+        res.status(201).send({
+            success:true,
+            message:"Get All Categories",
+            body:allCategories
+        })
+    } catch (error) {
+        res.status(201).send({
+            success:false,
+            message:"Error While Getting Categoires" + error,
+            body:null
+        })
+    }
+}
+const getDropdownProducts = async ( req , res ) =>{
+    try {
+    
+        const query = req.query.q;
+ 
+        const categories = await CategoryModel.find({
+          name : { $regex : query , $options:"i"}
+        }).limit(5)
+
+
+        res.send({
+            success:true,
+            message:"retrived dropdown items Successfully for "+query,
+            body:categories
+        })
+    } catch (error) {
+        res.send({
+            success:false,
+            message:"error while getting" + error,
+            body:null
+        })
+    }
+  }
+
+module.exports = { add , getAll , getDropdownProducts , trendingCategory }

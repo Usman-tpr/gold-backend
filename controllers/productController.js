@@ -3,6 +3,7 @@ const Deal = require('../models/DealsModel');
 const Cart = require("../models/cartModel");
 const {uploadImagesToCloudinary} = require("../utills/cloudinary")
 const { default: mongoose } = require('mongoose');
+const CategoryModel = require('../models/CategoryModel');
 
 
 const postProduct = async (req, res) => {
@@ -435,6 +436,7 @@ const getMyCarts = async (req, res) => {
     }
   }
 
+
 module.exports = {
     addToCart,
     getMyCarts,
@@ -451,5 +453,6 @@ module.exports = {
   getHomePageProducts,
   getProductsBySlug,
   getFullSet,
-  AddOnRent
+  AddOnRent,
+
 };

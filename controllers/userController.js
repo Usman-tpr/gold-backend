@@ -41,7 +41,6 @@ const signup = async (req, res) => {
                 name,
                 phone,
                 password: hashedPassword,
-                location
             })
             await newlyData.save();
            
